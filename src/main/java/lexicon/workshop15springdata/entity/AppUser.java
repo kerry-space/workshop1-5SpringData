@@ -28,7 +28,7 @@ public class AppUser {
 
     //same as setting LocalDate.now() in constructor
     @CreationTimestamp
-    private LocalDate regdate;
+    private LocalDate regDate;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "details_id")
@@ -39,5 +39,11 @@ public class AppUser {
         this.password = password;
         this.regdate = regdate;
 
+    }
+
+    public AppUser(String username, String password, Details details) {
+        this.username = username;
+        this.password = password;
+        this.details = details;
     }
 }
