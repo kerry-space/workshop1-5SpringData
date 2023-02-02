@@ -1,5 +1,6 @@
 package lexicon.workshop15springdata.entity;
 
+import lexicon.workshop15springdata.eception.DataDuplicateException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,22 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private List<Author> authors = new ArrayList<>();
+
+
+    //helper methods
+    public void addAuthor(Author author){
+        if (authors.contains(author)){
+            throw new DataDuplicateException("Data Duplicate Exception");
+        }
+        authors.add(author);
+    }
+
+    public void removeAuthor(Author author){
+        if (!authors.contains(author)){
+            throw new DataDuplicateException("Data Duplicate Exception");
+        }
+        authors.remove(author);
+    }
 
 
 
