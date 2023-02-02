@@ -1,5 +1,6 @@
 package lexicon.workshop15springdata.entity;
 
+import lexicon.workshop15springdata.eception.DataDuplicateException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,22 @@ public class Author {
     )
     private List<Book> writtenBooks = new ArrayList<>();
 
+
+
+    //helper methods
+    public void addAuthor(Book book){
+        if (writtenBooks.contains(book)){
+            throw new DataDuplicateException("Data Duplicate Exception");
+        }
+        writtenBooks.add(book);
+    }
+
+    public void removeAuthor(Book book){
+        if (!writtenBooks.contains(book)){
+            throw new DataDuplicateException("Data Duplicate Exception");
+        }
+        writtenBooks.remove(book);
+    }
 
 
 }

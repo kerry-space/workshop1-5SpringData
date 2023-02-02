@@ -1,5 +1,6 @@
 package lexicon.workshop15springdata.entity;
 
+import lexicon.workshop15springdata.eception.DataDuplicateException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import javax.xml.soap.Detail;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 //to generate Boilerplate Code refer to blocks with fixed pattern, Setter&Getter, ToString,EqualsAndHashCode
 @Data
@@ -34,6 +37,9 @@ public class AppUser {
     @JoinColumn(name = "details_id")
     private Details details;
 
+    @OneToMany(mappedBy = "borrower",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    private List<BookLoan> bookLoans = new ArrayList<>();
+
     public AppUser(String username, String password, LocalDate regDate) {
         this.username = username;
         this.password = password;
@@ -45,5 +51,25 @@ public class AppUser {
         this.username = username;
         this.password = password;
         this.details = details;
+    }
+
+
+    //helper methods
+    public void  addBookLoan(BookLoan bookLoan){
+       if(bookLoans.contains(bookLoan)){
+           throw new DataDuplicateException("Data Duplicate Exception");
+       }
+       bookLoans.add(bookLoan);
+       bookLoan.setBorrower(this);
+
+    }
+
+    public void removeBookLoan(BookLoan bookLoan) {
+        if (!bookLoans.contains(bookLoan)){
+            throw new DataDuplicateException("Data Duplicate Exception");
+        }
+        bookLoans.remove(bookLoan);
+        bookLoan.setBorrower(null);
+
     }
 }
